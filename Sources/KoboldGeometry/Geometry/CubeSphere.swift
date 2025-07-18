@@ -1,6 +1,6 @@
 import simd
 
-public struct KGeometryCubeSphere {
+public struct KGEOGeometryCubeSphere {
     private static let positions: [SIMD3<Float>] = [
         SIMD3<Float>( 0.5,  0.5,  0.5),
         SIMD3<Float>( 0.5, -0.5,  0.5),
@@ -26,7 +26,7 @@ public struct KGeometryCubeSphere {
         radius: Float = 1,
         inwardNormals: Bool = false,
         flatNormals: Bool = false
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         if flatNormals {
             return getFlatNormalVertices(subdivisions: subdivisions, radius: radius, inwardNormals: inwardNormals)
         } else {
@@ -38,9 +38,9 @@ public struct KGeometryCubeSphere {
         subdivisions: Int,
         radius: Float,
         inwardNormals: Bool
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         var indices: [UInt32] = []
-        let vertexMap = KGeometryVertexMap<SIMD3<Float>>()
+        let vertexMap = KGEOGeometryVertexMap<SIMD3<Float>>()
 
         let segments = max(1, Int(pow(2.0, Float(subdivisions))))
         let segmentSize: Float = 1.0 / Float(segments)
@@ -113,7 +113,7 @@ public struct KGeometryCubeSphere {
             }
         }
 
-        return KGeometry(
+        return KGEOGeometry(
             vertices: vertexMap.allVertices,
             indices: indices)
     }
@@ -122,7 +122,7 @@ public struct KGeometryCubeSphere {
         subdivisions: Int,
         radius: Float,
         inwardNormals: Bool
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         var vertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
         var indices: [UInt32] = []
 
@@ -177,7 +177,7 @@ public struct KGeometryCubeSphere {
         }
 
 
-        return KGeometry(
+        return KGEOGeometry(
             vertices: vertices,
             indices: indices)
     }

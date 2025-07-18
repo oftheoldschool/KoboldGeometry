@@ -1,6 +1,6 @@
 import simd
 
-public struct KGeometryCube {
+public struct KGEOGeometryCube {
     private static let positions: [SIMD3<Float>] = [
         SIMD3<Float>( 1,  1,  1),
         SIMD3<Float>( 1, -1,  1),
@@ -37,7 +37,7 @@ public struct KGeometryCube {
         SIMD2<Float>(1, 1),
     ]
 
-    public static func getVertices() -> KGeometry {
+    public static func getVertices() -> KGEOGeometry {
         var vertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
         var indices: [UInt32] = []
 
@@ -51,7 +51,7 @@ public struct KGeometryCube {
             indices += [0,2,1,0,3,2].map { $0 + UInt32(vertexOffset) }
         }
 
-        return KGeometry(
+        return KGEOGeometry(
             vertices: vertices,
             indices: indices)
     }

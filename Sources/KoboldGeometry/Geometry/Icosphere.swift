@@ -2,7 +2,7 @@ import simd
 
 public typealias HeightFunction = ([SIMD3<Float>]) -> [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)]
 
-public class KGeometryIcosphere {
+public class KGEOGeometryIcosphere {
     private static let x: Float = 0.525731112119133696
     private static let z: Float = 0.850650808352039932
 
@@ -50,7 +50,7 @@ public class KGeometryIcosphere {
         inwardNormals: Bool = false,
         flatNormals: Bool = false,
         vertexHeightFunction: HeightFunction? = nil
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         if flatNormals {
             return getFlatNormalGeometry(
                 subdivisions: subdivisions,
@@ -73,7 +73,7 @@ public class KGeometryIcosphere {
         radius: Float,
         inwardNormals: Bool,
         vertexHeightFunction: HeightFunction?
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         var vertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
         var indices: [UInt32] = []
 
@@ -135,7 +135,7 @@ public class KGeometryIcosphere {
             vertices = modifiedVertices
         }
 
-        return KGeometry(
+        return KGEOGeometry(
             vertices: vertices,
             indices: indices)
     }
@@ -145,7 +145,7 @@ public class KGeometryIcosphere {
         radius: Float,
         inwardNormals: Bool,
         vertexHeightFunction: HeightFunction?
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         var smoothVertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
         var smoothIndices: [UInt32] = []
 
@@ -251,7 +251,7 @@ public class KGeometryIcosphere {
             }
         }
 
-        return KGeometry(
+        return KGEOGeometry(
             vertices: flatVertices,
             indices: flatIndices)
     }

@@ -1,11 +1,11 @@
 import simd
 
-public class KGeometryRing {
+public class KGEOGeometryRing {
     public static func getVertices(
         segments: Int,
         outerRadius: Float,
         innerRadius: Float
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         let segmentAngle = Float.pi * 2.0 / Float(segments)
         let vertices = (0..<segments).flatMap { i in
             let angle = segmentAngle * Float(i)
@@ -28,7 +28,7 @@ public class KGeometryRing {
             ]
         }
         
-        return KGeometry(
+        return KGEOGeometry(
             vertices: vertices,
             indices: indices)
     }

@@ -1,12 +1,12 @@
 import simd
 
-public struct KGeometryCone {
+public struct KGEOGeometryCone {
     public static func getVertices(
         radius: Float = 1,
         height: Float = 2,
         segments: Int = 16,
         flatNormals: Bool = false
-    ) -> KGeometry
+    ) -> KGEOGeometry
     {
         if flatNormals {
             return getFlatNormalCone(radius: radius, height: height, segments: segments)
@@ -19,7 +19,7 @@ public struct KGeometryCone {
         radius: Float,
         height: Float,
         segments: Int
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         let theta = Float.pi * 2 / Float(segments)
         let topY = height / 2
         let bottomY = -topY
@@ -67,7 +67,7 @@ public struct KGeometryCone {
             ]
         }
 
-        return KGeometry(
+        return KGEOGeometry(
             vertices: vertices,
             indices: indices
         )
@@ -77,7 +77,7 @@ public struct KGeometryCone {
         radius: Float,
         height: Float,
         segments: Int
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         let theta = Float.pi * 2 / Float(segments)
         let topY = height / 2
         let bottomY = -topY
@@ -131,7 +131,7 @@ public struct KGeometryCone {
             indices.append(sideIndex + 2)
         }
 
-        return KGeometry(
+        return KGEOGeometry(
             vertices: vertices,
             indices: indices
         )

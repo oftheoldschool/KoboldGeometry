@@ -1,12 +1,12 @@
 import simd
 
-public struct KGeometryCylinder {
+public struct KGEOGeometryCylinder {
     public static func getVertices(
         radius: Float = 1,
         height: Float = 2,
         segments: Int = 16,
         flatNormals: Bool = false
-    ) -> KGeometry
+    ) -> KGEOGeometry
     {
         if flatNormals {
             return getFlatNormalVertices(radius: radius, height: height, segments: segments)
@@ -19,7 +19,7 @@ public struct KGeometryCylinder {
         radius: Float,
         height: Float,
         segments: Int
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         let theta = Float.pi * 2 / Float(segments)
         let topY = height / 2
         let bottomY = -topY
@@ -68,14 +68,14 @@ public struct KGeometryCylinder {
             ]
         }
 
-        return KGeometry(vertices: vertices, indices: indices)
+        return KGEOGeometry(vertices: vertices, indices: indices)
     }
 
     private static func getFlatNormalVertices(
         radius: Float,
         height: Float,
         segments: Int
-    ) -> KGeometry {
+    ) -> KGEOGeometry {
         let theta = Float.pi * 2 / Float(segments)
         let topY = height / 2
         let bottomY = -topY
@@ -147,6 +147,6 @@ public struct KGeometryCylinder {
             indices.append(sideStartIndex + 5)
         }
 
-        return KGeometry(vertices: vertices, indices: indices)
+        return KGEOGeometry(vertices: vertices, indices: indices)
     }
 }

@@ -1,6 +1,6 @@
 import simd
 
-public class KGeometryVertexMap<T: Hashable> {
+public class KGEOGeometryVertexMap<T: Hashable> {
     private var vertexMap: [T: UInt32] = [:]
     private var vertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
     
@@ -27,7 +27,7 @@ public class KGeometryVertexMap<T: Hashable> {
     }
 }
 
-public extension KGeometryVertexMap where T == SIMD3<Float> {
+public extension KGEOGeometryVertexMap where T == SIMD3<Float> {
     func roundedKey(_ position: SIMD3<Float>, precision: Float = 1e6) -> SIMD3<Float> {
         return SIMD3<Float>(
             round(position.x * precision) / precision,
