@@ -47,31 +47,29 @@ public class KGEOGeometryIcosphere {
     public static func getVertices(
         subdivisions: Int = 1,
         radius: Float = 1,
-        inwardNormals: Bool = false,
-        flatNormals: Bool = false,
+        inwardFaces: Bool = false,
+        smoothNormals: Bool = false,
         vertexHeightFunction: HeightFunction? = nil
     ) -> KGEOGeometry {
-        if flatNormals {
-            return getFlatNormalGeometry(
-                subdivisions: subdivisions,
-                radius: radius,
-                inwardNormals: inwardNormals,
-                vertexHeightFunction: vertexHeightFunction
-            )
-        } else {
+        if smoothNormals {
             return getSmoothNormalGeometry(
                 subdivisions: subdivisions,
                 radius: radius,
-                inwardNormals: inwardNormals,
-                vertexHeightFunction: vertexHeightFunction
-            )
+                inwardFaces: inwardFaces,
+                vertexHeightFunction: vertexHeightFunction)
+        } else {
+            return getFlatNormalGeometry(
+                subdivisions: subdivisions,
+                radius: radius,
+                inwardFaces: inwardFaces,
+                vertexHeightFunction: vertexHeightFunction)
         }
     }
 
     private static func getSmoothNormalGeometry(
         subdivisions: Int,
         radius: Float,
-        inwardNormals: Bool,
+        inwardFaces: Bool,
         vertexHeightFunction: HeightFunction?
     ) -> KGEOGeometry {
         var vertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
@@ -84,14 +82,14 @@ public class KGEOGeometryIcosphere {
             let position = normal * radius
             vertices.append((
                 position: position,
-                normal: inwardNormals ? -normal : normal,
+                normal: inwardFaces ? -normal : normal,
                 texCoord: .zero
             ))
         }
 
         for triangle in indexData {
             indices.append(UInt32(triangle[0]))
-            if inwardNormals {
+            if inwardFaces {
                 indices.append(UInt32(triangle[2]))
                 indices.append(UInt32(triangle[1]))
             } else {
@@ -143,7 +141,7 @@ public class KGEOGeometryIcosphere {
     private static func getFlatNormalGeometry(
         subdivisions: Int,
         radius: Float,
-        inwardNormals: Bool,
+        inwardFaces: Bool,
         vertexHeightFunction: HeightFunction?
     ) -> KGEOGeometry {
         var smoothVertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
@@ -217,7 +215,7 @@ public class KGEOGeometryIcosphere {
             let edge2 = v3 - v1
             var faceNormal = normalize(cross(edge1, edge2))
 
-            if inwardNormals {
+            if inwardFaces {
                 faceNormal = -faceNormal
             }
 
@@ -242,7 +240,7 @@ public class KGEOGeometryIcosphere {
             ))
 
             flatIndices.append(startIndex)
-            if inwardNormals {
+            if inwardFaces {
                 flatIndices.append(startIndex + 2)
                 flatIndices.append(startIndex + 1)
             } else {

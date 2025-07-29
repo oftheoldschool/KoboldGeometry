@@ -5,13 +5,13 @@ public struct KGEOGeometryCone {
         radius: Float = 1,
         height: Float = 2,
         segments: Int = 16,
-        flatNormals: Bool = false
+        smoothNormals: Bool = false
     ) -> KGEOGeometry
     {
-        if flatNormals {
-            return getFlatNormalCone(radius: radius, height: height, segments: segments)
-        } else {
+        if smoothNormals {
             return getSmoothNormalCone(radius: radius, height: height, segments: segments)
+        } else {
+            return getFlatNormalCone(radius: radius, height: height, segments: segments)
         }
     }
 

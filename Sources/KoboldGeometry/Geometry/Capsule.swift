@@ -7,7 +7,7 @@ public struct KGEOGeometryCapsule {
         height: Float = 1,
         segments: Int = 16,
         capSubdivisions: Int? = nil,
-        flatNormals: Bool = false
+        smoothNormals: Bool = false
     ) -> KGEOGeometry {
         let segments = max(3, segments)
         let actualCapRadius = capRadius ?? cylinderRadius
@@ -36,14 +36,14 @@ public struct KGEOGeometryCapsule {
                 let normal: SIMD3<Float>
                 let nextNormal: SIMD3<Float>
 
-                if flatNormals {
+                if smoothNormals {
+                    normal = normalize(SIMD3<Float>(xPos, 0, zPos))
+                    nextNormal = normalize(SIMD3<Float>(xPosNext, 0, zPosNext))
+                } else {
                     let edge1 = bottomRight - bottomLeft
                     let edge2 = topLeft - bottomLeft
                     normal = normalize(cross(edge1, edge2))
                     nextNormal = normal
-                } else {
-                    normal = normalize(SIMD3<Float>(xPos, 0, zPos))
-                    nextNormal = normalize(SIMD3<Float>(xPosNext, 0, zPosNext))
                 }
 
                 let baseIndex = UInt32(vertices.count)
@@ -102,19 +102,7 @@ public struct KGEOGeometryCapsule {
                     )
 
                     let normal1, normal2, normal3, normal4: SIMD3<Float>
-                    if flatNormals {
-                        let edge1 = pos2 - pos1
-                        let edge2 = pos3 - pos1
-                        let crossProduct = cross(edge1, edge2)
-                        let len = length(crossProduct)
-                        let faceNormal = len > Float.ulpOfOne
-                            ? crossProduct / len
-                            : SIMD3<Float>(0, -1, 0)
-                        normal1 = faceNormal
-                        normal2 = faceNormal
-                        normal3 = faceNormal
-                        normal4 = faceNormal
-                    } else {
+                    if smoothNormals {
                         let centerY = yOffset
                         normal1 = normalize(SIMD3<Float>(
                             (pos1.x - 0) / (cylinderRadius * cylinderRadius),
@@ -136,6 +124,18 @@ public struct KGEOGeometryCapsule {
                             (pos4.y - centerY) / (actualCapRadius * actualCapRadius),
                             (pos4.z - 0) / (cylinderRadius * cylinderRadius)
                         ))
+                    } else {
+                        let edge1 = pos2 - pos1
+                        let edge2 = pos3 - pos1
+                        let crossProduct = cross(edge1, edge2)
+                        let len = length(crossProduct)
+                        let faceNormal = len > Float.ulpOfOne
+                            ? crossProduct / len
+                            : SIMD3<Float>(0, -1, 0)
+                        normal1 = faceNormal
+                        normal2 = faceNormal
+                        normal3 = faceNormal
+                        normal4 = faceNormal
                     }
 
                     let baseIndex = UInt32(vertices.count)
@@ -149,7 +149,7 @@ public struct KGEOGeometryCapsule {
                         vertices.append((position: pos4, normal: normal4, texCoord: .zero))
                         vertices.append((position: pos3, normal: normal3, texCoord: .zero))
                     } else {
-                        let normalMultiplier: Float = flatNormals ? -1 : 1
+                        let normalMultiplier: Float = smoothNormals ? 1 : -1
                         vertices.append((position: pos1, normal: normalMultiplier * normal1, texCoord: .zero))
                         vertices.append((position: pos3, normal: normalMultiplier * normal3, texCoord: .zero))
                         vertices.append((position: pos2, normal: normalMultiplier * normal2, texCoord: .zero))

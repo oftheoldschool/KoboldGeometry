@@ -24,20 +24,26 @@ public struct KGEOGeometryCubeSphere {
     public static func getVertices(
         subdivisions: Int = 0,
         radius: Float = 1,
-        inwardNormals: Bool = false,
-        flatNormals: Bool = false
+        inwardFaces: Bool = false,
+        smoothNormals: Bool = false
     ) -> KGEOGeometry {
-        if flatNormals {
-            return getFlatNormalVertices(subdivisions: subdivisions, radius: radius, inwardNormals: inwardNormals)
+        if smoothNormals {
+            return getSmoothNormalVertices(
+                subdivisions: subdivisions,
+                radius: radius,
+                inwardFaces: inwardFaces)
         } else {
-            return getSmoothNormalVertices(subdivisions: subdivisions, radius: radius, inwardNormals: inwardNormals)
+            return getFlatNormalVertices(
+                subdivisions: subdivisions,
+                radius: radius,
+                inwardFaces: inwardFaces)
         }
     }
 
     private static func getSmoothNormalVertices(
         subdivisions: Int,
         radius: Float,
-        inwardNormals: Bool
+        inwardFaces: Bool
     ) -> KGEOGeometry {
         var indices: [UInt32] = []
         let vertexMap = KGEOGeometryVertexMap<SIMD3<Float>>()
@@ -64,7 +70,7 @@ public struct KGEOGeometryCubeSphere {
                             let normal = normalize(position)
                             return (
                                 position: normalizedPos,
-                                normal: inwardNormals ? -normal : normal,
+                                normal: inwardFaces ? -normal : normal,
                                 texCoord: .zero
                             )
                         }
@@ -75,7 +81,7 @@ public struct KGEOGeometryCubeSphere {
                             let normal = normalize(posRight)
                             return (
                                 position: normalizedPos,
-                                normal: inwardNormals ? -normal : normal,
+                                normal: inwardFaces ? -normal : normal,
                                 texCoord: .zero
                             )
                         }
@@ -88,7 +94,7 @@ public struct KGEOGeometryCubeSphere {
                             let normal = normalize(posDown)
                             return (
                                 position: normalizedPos,
-                                normal: inwardNormals ? -normal : normal,
+                                normal: inwardFaces ? -normal : normal,
                                 texCoord: .zero
                             )
                         }
@@ -99,7 +105,7 @@ public struct KGEOGeometryCubeSphere {
                             let normal = normalize(posDiag)
                             return (
                                 position: normalizedPos,
-                                normal: inwardNormals ? -normal : normal,
+                                normal: inwardFaces ? -normal : normal,
                                 texCoord: .zero
                             )
                         }
@@ -121,7 +127,7 @@ public struct KGEOGeometryCubeSphere {
     private static func getFlatNormalVertices(
         subdivisions: Int,
         radius: Float,
-        inwardNormals: Bool
+        inwardFaces: Bool
     ) -> KGEOGeometry {
         var vertices: [(position: SIMD3<Float>, normal: SIMD3<Float>, texCoord: SIMD2<Float>?)] = []
         var indices: [UInt32] = []
@@ -160,7 +166,7 @@ public struct KGEOGeometryCubeSphere {
                     let normal2 = cross(spherePos11 - spherePos10, spherePos01 - spherePos10)
                     let quadNormal = normalize(normal1 + normal2)
 
-                    let finalNormal = inwardNormals ? -quadNormal : quadNormal
+                    let finalNormal = inwardFaces ? -quadNormal : quadNormal
 
                     let idx = UInt32(vertices.count)
                     vertices.append((position: spherePos00, normal: finalNormal, texCoord: SIMD2<Float>(u, v)))

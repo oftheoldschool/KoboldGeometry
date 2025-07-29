@@ -5,13 +5,19 @@ public struct KGEOGeometryCylinder {
         radius: Float = 1,
         height: Float = 2,
         segments: Int = 16,
-        flatNormals: Bool = false
+        smoothNormals: Bool = true
     ) -> KGEOGeometry
     {
-        if flatNormals {
-            return getFlatNormalVertices(radius: radius, height: height, segments: segments)
+        if smoothNormals {
+            return getSmoothNormalVertices(
+                radius: radius,
+                height: height,
+                segments: segments)
         } else {
-            return getSmoothNormalVertices(radius: radius, height: height, segments: segments)
+            return getFlatNormalVertices(
+                radius: radius,
+                height: height,
+                segments: segments)
         }
     }
 
